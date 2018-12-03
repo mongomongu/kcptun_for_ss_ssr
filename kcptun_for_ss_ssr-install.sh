@@ -364,6 +364,7 @@ config_for_ssrr(){
 	if [[ "${ssrr_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]]; then
 		[ ! -d /usr/local/shadowsocksrr ] && mkdir -p /usr/local/shadowsocksrr
 	fi
+	 curl -o /usr/local/shadowsocksrr/user-config.json https://raw.githubusercontent.com/currycan/key/master/user-config.json
 }
 install_for_ssrr(){
     #if [[ "${ss_libev_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]] || [[ "${ssr_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]] || [[ "${kcptun_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]]; then
@@ -505,18 +506,10 @@ pre_install_for_ssrr(){
     Print_Sys_Info
     Disable_Selinux
     check_ssr_installed
-    cd ${cur_dir}
-    ###############################   Shadowsocksrr   ###############################
-    if [ "${ssrr_installed_flag}" == "false" ]; then
-        echo
-        echo "=========================================================="
-        echo -e "${COLOR_PINK}configure Shadowsocksrr(SSRR) setting:${COLOR_END}"
-        curl -o /usr/local/shadowsocksrr/user-config.json https://raw.githubusercontent.com/currycan/key/master/user-config.json
-        echo "=========================================================="
-    elif [ "${ssrr_installed_flag}" == "true" ]; then
+    if [ "${ssrr_installed_flag}" == "true" ]; then
         echo
         echo -e "${COLOR_PINK}Shadowsocksrr has been installed, nothing to do...${COLOR_END}"
-        [ "${Install_Select}" == "6" ] && exit 0
+        exit 0
     fi
     # Press_Start
     get_latest_version
