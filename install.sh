@@ -633,16 +633,16 @@ shell_update
 [  -z ${clang_action} ] && clang_action="install"
 case "${clang_action}" in
 [Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii])
-    pre_install_for_ssrr 2>&1 | tee ${cur_dir}/ss-ssr-kcptun-install.log
+    pre_install_for_ssrr 2>&1 | tee ${cur_dir}/install.log
     ;;
 [Cc]|[Cc][Oo][Nn][Ff][Ii][Gg]|-[Cc]|--[Cc])
     configure_for_ssr
     ;;
 [Uu][Nn]|[Uu][Nn][Ii][Nn][Ss][Tt][Aa][Ll][Ll]|[Uu][Nn]|-[Uu][Nn]|--[Uu][Nn])
-    uninstall_for_ssrr 2>&1 | tee ${cur_dir}/ss-ssr-kcptun-uninstall.log
+    uninstall_for_ssrr 2>&1 | tee ${cur_dir}/uninstall.log
     ;;
 [Uu]|[Uu][Pp][Dd][Aa][Tt][Ee]|-[Uu]|--[Uu]|[Uu][Pp]|-[Uu][Pp]|--[Uu][Pp])
-    update_for_ssr 2>&1 | tee ${cur_dir}/ss-ssr-kcptun-update.log
+    update_for_ssr 2>&1 | tee ${cur_dir}/update.log
     ;;
 *)
     fun_clangcn "clear"
