@@ -1,7 +1,5 @@
-A tool to auto-compile & install KCPTUN for SS/SSR on Linux
+A tool to auto-compile & install ssrr on Linux
 ===========
-##一键安装KCPTUN for SS/SSR on Linux。  
-脚本是业余爱好，英文属于文盲，写的不好，欢迎您批评指正。
 ******
 ##<a name="index"/>目录
 
@@ -16,12 +14,6 @@ A tool to auto-compile & install KCPTUN for SS/SSR on Linux
         * [防火墙设置示例](#Firewall)
 * [更新](#Update)
 * [卸载](#UnInstall)
-
-******
-
-##<a name="thanks"/>致谢
-
-感谢[秋水逸冰][teddysun_url]，一键安装脚本中很多代码都是从秋水的脚本中借鉴过来的，在此感谢大神们的付出。  
 
 ******
 ##<a name="test"/>已测试平台
@@ -49,9 +41,14 @@ A tool to auto-compile & install KCPTUN for SS/SSR on Linux
 ------
 ###<a name="Install_command">安装命令
 ```Bash
-    wget --no-check-certificate -O ./kcptun_for_ss_ssr-install.sh https://raw.githubusercontent.com/onekeyshell/kcptun_for_ss_ssr/master/kcptun_for_ss_ssr-install.sh
+    wget --no-check-certificate -O ./kcptun_for_ss_ssr-install.sh https://raw.githubusercontent.com/mongomongu/kcptun_for_ss_ssr/master/kcptun_for_ss_ssr-install.sh
     chmod 700 ./kcptun_for_ss_ssr-install.sh
     ./kcptun_for_ss_ssr-install.sh install
+```
+```Bash
+    wget --no-check-certificate -O ./kcptun_for_ss_ssr-install.sh https://raw.githubusercontent.com/mongomongu/kcptun_for_ss_ssr/master/install.sh
+    chmod 700 ./install.sh
+    ./install.sh install
 ```
 ******
 ###<a name="Install_Jiaocheng">安装教程
