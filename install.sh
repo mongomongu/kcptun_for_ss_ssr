@@ -542,200 +542,8 @@ pre_install_for_ssrr(){
     if [ "${ssrr_installed_flag}" == "false" ]; then
         echo
         echo "=========================================================="
-        echo -e "${COLOR_PINK}Please input your Shadowsocksrr(SSRR) setting:${COLOR_END}"
-        echo
-        # Set shadowsocksrr password
-        def_ssrr_pwd=`fun_randstr`
-        echo "Please input password for shadowsocksrr"
-        # read -p "(Default password: ${def_ssrr_pwd}):" set_ssrr_pwd
-        def_ssrr_pwd="zzt2008zzt"
-        [ -z "${set_ssrr_pwd}" ] && set_ssrr_pwd="${def_ssrr_pwd}"
-        echo
-        echo "---------------------------------------"
-        echo "SSRR password = ${set_ssrr_pwd}"
-        echo "---------------------------------------"
-        echo
-        # Set shadowsocksrr port
-        while true
-        do
-            def_ssrr_port="48989"
-            echo -e "Please input port for shadowsocksrr [1-65535]"
-            # read -p "(Default port: ${def_ssrr_port}):" set_ssrr_port
-            set_ssrr_port="12018"
-            [ -z "$set_ssrr_port" ] && set_ssrr_port="${def_ssrr_port}"
-            expr ${set_ssrr_port} + 0 &>/dev/null
-            if [ $? -eq 0 ]; then
-                if [ ${set_ssrr_port} -ge 1 ] && [ ${set_ssrr_port} -le 65535 ]; then
-                    echo
-                    echo "---------------------------------------"
-                    echo "SSRR port = ${set_ssrr_port}"
-                    echo "---------------------------------------"
-                    echo
-                    break
-                else
-                    echo "Input error, please input correct number"
-                fi
-            else
-                echo "Input error, please input correct number"
-            fi
-        done
-        ssrr_local_port="10086"
-        #mujson_mgr.py
-        def_ssrr_method="aes-256-cfb"
-        echo -e "Please select encryption method for shadowsocksrr"
-        echo "  0: none"
-        echo "  1: aes-128-cfb"
-        echo "  2: aes-192-cfb"
-        echo "  3: aes-256-cfb (default)"
-        echo "  4: rc4-md5"
-        echo "  5: rc4-md5-6"
-        echo "  6: chacha20"
-        echo "  7: chacha20-ietf"
-        echo "  8: salsa20"
-        echo "  9: aes-128-ctr"
-        echo " 10: aes-192-ctr"
-        echo " 11: aes-256-ctr"
-        # read -p "Enter your choice (0, 1, 2, 3, ... or exit. default [${def_ssrr_method}]): " set_ssrr_method
-        set_ssrr_method=none
-        case "${set_ssrr_method}" in
-            0|[Nn][Oo][Nn][Ee])
-                set_ssrr_method="none"
-                ;;
-            1|[Aa][Ee][Ss]-128-[Cc][Ff][Bb])
-                set_ssrr_method="aes-128-cfb"
-                ;;
-            2|[Aa][Ee][Ss]-192-[Cc][Ff][Bb])
-                set_ssrr_method="aes-192-cfb"
-                ;;
-            3|[Aa][Ee][Ss]-256-[Cc][Ff][Bb])
-                set_ssrr_method="aes-256-cfb"
-                ;;
-            4|[Rr][Cc]4-[Mm][Dd]5)
-                set_ssrr_method="rc4-md5"
-                ;;
-            5|[Rr][Cc]4-[Mm][Dd]5-6)
-                set_ssrr_method="rc4-md5-6"
-                ;;
-            6|[Cc][Hh][Aa][Cc][Hh][Aa]20)
-                set_ssrr_method="chacha20"
-                ;;
-            7|[Cc][Hh][Aa][Cc][Hh][Aa]20-[Ii][Ee][Tt][Ff])
-                set_ssrr_method="chacha20-ietf"
-                ;;
-            8|[Ss][Aa][Ll][As][Aa]20)
-                set_ssrr_method="salsa20"
-                ;;
-            9|[Aa][Ee][Ss]-128-[Cc][Tt][Rr])
-                set_ssrr_method="aes-128-ctr"
-                ;;
-            10|[Aa][Ee][Ss]-192-[Cc][Tt][Rr])
-                set_ssrr_method="aes-192-ctr"
-                ;;
-            11|[Aa][Ee][Ss]-256-[Cc][Tt][Rr])
-                set_ssrr_method="aes-256-ctr"
-                ;;
-            [eE][xX][iI][tT])
-                exit 1
-                ;;
-            *)
-                set_ssrr_method="${def_ssrr_method}"
-                ;;
-        esac
-        echo
-        echo "---------------------------------------"
-        echo "SSRR method: ${set_ssrr_method}"
-        echo "---------------------------------------"
-        echo
-        def_ssrr_protocol="origin"
-        echo -e "Please select Protocol plugin for shadowsocksrr"
-        echo "  1: origin (default)"
-        echo "  2: auth_sha1_v4"
-        echo "  3: auth_sha1_v4_compatible"
-        echo "  4: auth_aes128_md5"
-        echo "  5: auth_aes128_sha1"
-        echo "  6: auth_chain_a"
-        echo "  7: auth_chain_b"
-        echo "  8: auth_chain_c"
-        echo "  9: auth_chain_d"
-        # read -p "Enter your choice (1, 2, 3, ... or exit. default [${def_ssrr_protocol}]): " set_ssrr_protocol
-        set_ssrr_protocol="auth_chain_f"
-        case "${set_ssrr_protocol}" in
-            1|[Oo][Rr][Ii][Gg][Ii][Nn])
-                set_ssrr_protocol="origin"
-                ;;
-            2|[Aa][Uu][Tt][Hh]_[Ss][Hh][Aa]1_[Vv]4)
-                set_ssrr_protocol="auth_sha1_v4"
-                ;;
-            3|[Aa][Uu][Tt][Hh]_[Ss][Hh][Aa]1_[Vv]4_[Cc][Oo][Mm][Pp][Aa][Tt][Ii][Bb][Ll][Ee])
-                set_ssrr_protocol="auth_sha1_v4_compatible"
-                ;;
-            4|[Aa][Uu][Tt][Hh]_[Aa][Ee][Ss]128_[Mm][Dd]5)
-                set_ssrr_protocol="auth_aes128_md5"
-                ;;
-            5|[Aa][Uu][Tt][Hh]_[Aa][Ee][Ss]128_[Ss][Hh][Aa]5)
-                set_ssrr_protocol="auth_aes128_sha1"
-                ;;
-            6|[Aa][Uu][Tt][Hh]_[Cc][Hh][Aa][Ii][Nn]_[Aa])
-                set_ssrr_protocol="auth_chain_a"
-                ;;
-            7|[Aa][Uu][Tt][Hh]_[Cc][Hh][Aa][Ii][Nn]_[Bb])
-                set_ssrr_protocol="auth_chain_b"
-                ;;
-            8|[Aa][Uu][Tt][Hh]_[Cc][Hh][Aa][Ii][Nn]_[Cc])
-                set_ssrr_protocol="auth_chain_c"
-                ;;
-            9|[Aa][Uu][Tt][Hh]_[Cc][Hh][Aa][Ii][Nn]_[Dd])
-                set_ssrr_protocol="auth_chain_d"
-                ;;
-            [eE][xX][iI][tT])
-                exit 1
-                ;;
-            *)
-                set_ssrr_protocol="${def_ssrr_protocol}"
-                ;;
-        esac
-        echo
-        echo "---------------------------------------"
-        echo "SSRR Protocol: ${set_ssrr_protocol}"
-        echo "---------------------------------------"
-        echo
-        def_ssrr_obfs="plain"
-        echo -e "Please select Obfs plugin for shadowsocksrr"
-        echo "  1: plain (default)"
-        echo "  2: http_simple_compatible"
-        echo "  3: http_simple"
-        echo "  4: tls1.2_ticket_auth_compatible"
-        echo "  5: tls1.2_ticket_auth"
-        # read -p "Enter your choice (1, 2, 3, ... or exit. default [${def_ssrr_obfs}]): " set_ssrr_obfs
-        set_ssrr_obfs="tls1.2_ticket_auth_compatible"
-        case "${set_ssrr_obfs}" in
-            1|[Pp][Ll][Aa][Ii][Nn])
-                set_ssrr_obfs="plain"
-                ;;
-            2|[Hh][Tt][Tt][Pp]_[Ss][Ii][Mm][Pp][Ll][Ee]_[Cc][Oo][Mm][Pp][Aa][Tt][Ii][Bb][Ll][Ee])
-                set_ssrr_obfs="http_simple_compatible"
-                ;;
-            3|[Hh][Tt][Tt][Pp]_[Ss][Ii][Mm][Pp][Ll][Ee])
-                set_ssrr_obfs="http_simple"
-                ;;
-            4|[Tt][Ll][Ss]1.2_[Tt][Ii][Cc][Kk][Ee][Tt]_[Aa][Uu][Tt][Hh]_[Cc][Oo][Mm][Pp][Aa][Tt][Ii][Bb][Ll][Ee])
-                set_ssrr_obfs="tls1.2_ticket_auth_compatible"
-                ;;
-            5|[Tt][Ll][Ss]1.2_[Tt][Ii][Cc][Kk][Ee][Tt]_[Aa][Uu][Tt][Hh])
-                set_ssrr_obfs="tls1.2_ticket_auth"
-                ;;
-            [eE][xX][iI][tT])
-                exit 1
-                ;;
-            *)
-                set_ssrr_obfs="${def_ssrr_obfs}"
-                ;;
-        esac
-        echo
-        echo "---------------------------------------"
-        echo "SSRR obfs: ${set_ssrr_obfs}"
-        echo "---------------------------------------"
-        echo
+        echo -e "${COLOR_PINK}configure Shadowsocksrr(SSRR) setting:${COLOR_END}"
+        curl -o /usr/local/shadowsocksrr/user-config.json https://raw.githubusercontent.com/currycan/key/master/user-config.json
         echo "=========================================================="
     elif [ "${ssrr_installed_flag}" == "true" ]; then
         echo
@@ -757,7 +565,7 @@ uninstall_for_ssrr(){
     Get_Dist_Name
     fun_clangcn "clear"
     echo -e "${COLOR_PINK}You will Uninstall Shadowsocksrr(python)${COLOR_END}"
-    Press_Start
+    # Press_Start
     check_ssr_installed
     if [ "${ssrr_installed_flag}" == "true" ]; then
         /etc/init.d/ssrr status > /dev/null 2>&1
@@ -811,7 +619,7 @@ update_for_ssr(){
     if [[ "${ssrr_update_flag}" == "true" ]]; then
         echo "+-------------------------------------------------------------+"
         echo -e "${COLOR_GREEN}Found a new version,update now...${COLOR_END}"
-        Press_Start
+        # Press_Start
     fi
     if [[ "${ssrr_installed_flag}" == "true" && "${ssrr_update_flag}" == "true" ]]; then
         /etc/init.d/ssrr status > /dev/null 2>&1
