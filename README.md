@@ -43,13 +43,13 @@ A tool to auto-compile & install ssrr on Linux
 ```Bash
 wget --no-check-certificate -O ./kcptun_for_ss_ssr-install.sh https://raw.githubusercontent.com/mongomongu/kcptun_for_ss_ssr/master/kcptun_for_ss_ssr-install.sh
 chmod 700 ./kcptun_for_ss_ssr-install.sh
-./kcptun_for_ss_ssr-install.sh install 2>&1 | tee kcptun_for_ss_ssr-install.log
+./kcptun_for_ss_ssr-install.sh install
 ```
 自用：
 ```Bash
 wget --no-check-certificate -O ./install.sh https://raw.githubusercontent.com/mongomongu/kcptun_for_ss_ssr/master/install.sh
 chmod 700 ./install.sh
-./install.sh install 2>&1 | tee install.log
+./install.sh install
 ```
 ******
 ###<a name="Install_Jiaocheng">安装教程
