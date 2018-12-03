@@ -1,7 +1,7 @@
 A tool to auto-compile & install ssrr on Linux
 ===========
 ******
-##<a name="index"/>目录
+<a name="index"/>目录
 
 * [致谢](#thanks)
 * [已测试平台](#test)
@@ -45,8 +45,9 @@ A tool to auto-compile & install ssrr on Linux
     chmod 700 ./kcptun_for_ss_ssr-install.sh
     ./kcptun_for_ss_ssr-install.sh install
 ```
+自用：
 ```Bash
-    wget --no-check-certificate -O ./kcptun_for_ss_ssr-install.sh https://raw.githubusercontent.com/mongomongu/kcptun_for_ss_ssr/master/install.sh
+    wget --no-check-certificate -O ./install.sh https://raw.githubusercontent.com/mongomongu/kcptun_for_ss_ssr/master/install.sh
     chmod 700 ./install.sh
     ./install.sh install
 ```
