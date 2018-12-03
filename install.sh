@@ -360,28 +360,7 @@ download_for_ssrr(){
         fi
     fi
 }
-config_for_ssrr(){
-    if [[ "${ssrr_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]]; then
-    [ ! -d /usr/local/shadowsocksrr ] && mkdir -p /usr/local/shadowsocksrr
-    cat > ${ssrr_config}<<-EOF
-{
-    "server":"0.0.0.0",
-    "server_ipv6":"::",
-    "local_address":"127.0.0.1",
-    "local_port":${ssrr_local_port},
-    "port_password":{
-        "${set_ssrr_port}":{"protocol":"${set_ssrr_protocol}", "protocol_param":"", "password":"${set_ssrr_pwd}", "obfs":"${set_ssrr_obfs}", "obfs_param":""}
-    },
-    "timeout":300,
-    "method":"${set_ssrr_method}",
-    "redirect": "",
-    "dns_ipv6": false,
-    "fast_open": false,
-    "workers": 1
-}
-EOF
-    fi
-}
+
 install_for_ssrr(){
     #if [[ "${ss_libev_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]] || [[ "${ssr_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]] || [[ "${kcptun_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]]; then
         if check_sys packageManager yum; then
@@ -421,8 +400,6 @@ install_for_ssrr(){
         ldconfig
         #echo "/usr/lib" > /etc/ld.so.conf.d/local.conf
     fi
-
-
     if [[ "${ssrr_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]] || [[ "${ssrr_installed_flag}" == "true" && "${ssrr_update_flag}" == "true" && "${clang_action}" =~ ^[Uu]|[Uu][Pp][Dd][Aa][Tt][Ee]|-[Uu]|--[Uu]|[Uu][Pp]|-[Uu][Pp]|--[Uu][Pp]$ ]]; then
         cd ${cur_dir}
         unzip -qo ssrr.zip
@@ -513,20 +490,7 @@ show_for_ssrr(){
         echo -e "========================= Your Server Setting ========================="
         echo -e "Your Server IP: ${COLOR_GREEN}${SERVER_IP}${COLOR_END}"
     fi
-    if [ "${ssrr_install_flag}" == "true" ]; then
-        echo "-------------------- Shadowsocksrr Setting --------------------"
-        echo -e "SSRR configure file         : ${COLOR_GREEN}${ssrr_config}${COLOR_END}"
-        echo -e "SSRR Server Port            : ${COLOR_GREEN}${set_ssrr_port}${COLOR_END}"
-        echo -e "SSRR Password               : ${COLOR_GREEN}${set_ssrr_pwd}${COLOR_END}"
-        echo -e "SSRR Encryption Method      : ${COLOR_GREEN}${set_ssrr_method}${COLOR_END}"
-        echo -e "SSRR protocol               : ${COLOR_GREEN}${set_ssrr_protocol}${COLOR_END}"
-        echo -e "SSRR obfs                   : ${COLOR_GREEN}${set_ssrr_obfs}${COLOR_END}"
-        #echo -e "SSRR Local IP               : ${COLOR_GREEN}127.0.0.1${COLOR_END}"
-        #echo -e "SSRR Local Port             : ${COLOR_GREEN}${ssrr_local_port}${COLOR_END}"
-        echo "----------------------------------------------------------"
-        echo -e "SSRR status manage: ${COLOR_PINK}/etc/init.d/ssrr${COLOR_END} {${COLOR_GREEN}start|stop|restart|status|config|version${COLOR_END}}"
-        echo "=========================================================="
-    fi
+    nl ${ssrr_config}
     echo
 }
 pre_install_for_ssrr(){
