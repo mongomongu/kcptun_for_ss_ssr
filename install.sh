@@ -11,32 +11,19 @@ if [ $(id -u) != "0" ]; then
     echo "Error: You must be root to run this script, please use root to install ssrr"
     exit 1
 fi
-shell_update(){
-    fun_clangcn "clear"
-    echo "+ Check updates for shell..."
-    remote_shell_version=`wget --no-check-certificate -qO- ${shell_download_link} | sed -n '/'^version'/p' | cut -d\" -f2`
-    if [ ! -z ${remote_shell_version} ]; then
-        if [[ "${version}" != "${remote_shell_version}" ]];then
-            echo -e "${COLOR_GREEN}Found a new version,update now!!!${COLOR_END}"
-            echo
-            echo -n "+ Update shell ..."
-            if ! wget --no-check-certificate -qO $0 ${shell_download_link}; then
-                echo -e " [${COLOR_RED}failed${COLOR_END}]"
-                echo
-                exit 1
-            else
-                echo -e " [${COLOR_GREEN}OK${COLOR_END}]"
-                echo
-                echo -e "${COLOR_GREEN}Please Re-run${COLOR_END} ${COLOR_PINK}$0 ${clang_action}${COLOR_END}"
-                echo
-                exit 1
-            fi
-            exit 1
-        fi
-    fi
-}
-shell_download_link="https://raw.githubusercontent.com/mongomongu/kcptun_for_ss_ssr/master/install.sh"
-program_version_link="https://raw.githubusercontent.com/mongomongu/kcptun_for_ss_ssr/master/version.sh"
+
+# LIBSODIUM
+export LIBSODIUM_VER=1.0.13
+export LIBSODIUM_LINK="https://github.com/jedisct1/libsodium/releases/download/${LIBSODIUM_VER}/libsodium-${LIBSODIUM_VER}.tar.gz"
+# MBEDTLS
+export MBEDTLS_VER=2.6.0
+export MBEDTLS_LINK="https://tls.mbed.org/download/mbedtls-${MBEDTLS_VER}-gpl.tgz"
+# SSRR
+#export SSRR_VER=3.2.1
+export SSRR_VER=$(wget --no-check-certificate -qO- https://raw.githubusercontent.com/onekeyshell/shadowsocksr/akkariiin/master/shadowsocks/version.py | grep return | cut -d\' -f2 | awk '{print $2}')
+export SSRR_LINK="https://github.com/onekeyshell/shadowsocksr/archive/akkariiin/master.zip"
+export SSRR_YUM_INIT="https://raw.githubusercontent.com/mongomongu/kcptun_for_ss_ssr/master/ssrr.init"
+export SSRR_APT_INIT="https://raw.githubusercontent.com/mongomongu/kcptun_for_ss_ssr/master/ssrr_apt.init"
 ssrr_config="/usr/local/shadowsocksrr/user-config.json"
 contact_us="https://github.com/mongomongu/kcptun_for_ss_ssr/issues"
 
@@ -252,25 +239,11 @@ pre_install_packs(){
         fi
     fi
 }
-# Random password
-fun_randstr(){
-  index=0
-  strRandomPass=""
-  for i in {a..z}; do arr[index]=$i; index=`expr ${index} + 1`; done
-  for i in {A..Z}; do arr[index]=$i; index=`expr ${index} + 1`; done
-  for i in {0..9}; do arr[index]=$i; index=`expr ${index} + 1`; done
-  for i in {1..16}; do strRandomPass="$strRandomPass${arr[$RANDOM%$index]}"; done
-  echo $strRandomPass
-}
 get_ip(){
     local IP=$(ip addr | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | egrep -v "^192\.168|^172\.1[6-9]\.|^172\.2[0-9]\.|^172\.3[0-2]\.|^10\.|^127\.|^255\.|^0\." | head -n 1)
     [ -z ${IP} ] && IP=$(wget -qO- -t1 -T2 ip.clang.cn | sed -r 's/\r//')
     [ -z ${IP} ] && IP=$(wget -qO- -t1 -T2 ipv4.icanhazip.com | sed -r 's/\r//')
     [ ! -z ${IP} ] && echo ${IP} || echo
-}
-Dispaly_Selection(){
-    echo -e "${COLOR_YELOW}ssr install.${COLOR_END}"
-    echo -e "${COLOR_PINK}You will install Shadowsocksrr(python) ${SSRR_VER}${COLOR_END}"
 }
 # Install cleanup
 install_cleanup(){
@@ -283,20 +256,6 @@ check_ssr_installed(){
         ssrr_installed_flag="true"
     else
         ssrr_installed_flag="false"
-    fi
-}
-get_install_version(){
-    rm -f ${cur_dir}/.version.sh
-    if ! wget --no-check-certificate -qO ${cur_dir}/.version.sh ${program_version_link}; then
-        echo -e "${COLOR_RED}Failed to download version.sh${COLOR_END}"
-    fi
-    if [ -s ${cur_dir}/.version.sh ]; then
-        [ -x ${cur_dir}/.version.sh ] && chmod +x ${cur_dir}/.version.sh
-        . ${cur_dir}/.version.sh
-    fi
-    if [ -z ${SSRR_VER} ] ; then
-        echo -e "${COLOR_RED}Error: ${COLOR_END}Get Program version failed!"
-        exit 1
     fi
 }
 get_latest_version(){
@@ -361,9 +320,10 @@ download_for_ssrr(){
     fi
 }
 config_for_ssrr(){
-	if [[ "${ssrr_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]]; then
-		[ ! -d /usr/local/shadowsocksrr ] && mkdir -p /usr/local/shadowsocksrr
-	fi
+    if [[ "${ssrr_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]]; then
+        [ ! -d /usr/local/shadowsocksrr ] && mkdir -p /usr/local/shadowsocksrr
+    fi
+    curl -o /usr/local/shadowsocksrr/user-config.json https://raw.githubusercontent.com/currycan/key/master/user-config.json
 }
 install_for_ssrr(){
     #if [[ "${ss_libev_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]] || [[ "${ssr_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]] || [[ "${kcptun_installed_flag}" == "false" && "${clang_action}" =~ ^[Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii]$ ]]; then
@@ -499,8 +459,6 @@ show_for_ssrr(){
 }
 pre_install_for_ssrr(){
     fun_clangcn "clear"
-    get_install_version
-    Dispaly_Selection
     # Press_Install
     Print_Sys_Info
     Disable_Selinux
@@ -516,7 +474,7 @@ pre_install_for_ssrr(){
     elif [ "${ssrr_installed_flag}" == "true" ]; then
         echo
         echo -e "${COLOR_PINK}Shadowsocksrr has been installed, nothing to do...${COLOR_END}"
-        [ "${Install_Select}" == "6" ] && exit 0
+        exit 0
     fi
     # Press_Start
     get_latest_version
@@ -565,7 +523,6 @@ update_for_ssr(){
     fun_clangcn "clear"
     echo -e "${COLOR_PINK}You will update Shadowsocksrr(python)${COLOR_END}"
     check_ssr_installed
-    get_install_version
     get_latest_version
     echo "+-------------------------------------------------------------+"
     if [ "${ssrr_installed_flag}" == "true" ]; then
@@ -633,7 +590,6 @@ fun_clangcn "clear"
 Get_Dist_Name
 Check_OS_support
 pre_install_packs
-shell_update
 [  -z ${clang_action} ] && clang_action="install"
 case "${clang_action}" in
 [Ii]|[Ii][Nn]|[Ii][Nn][Ss][Tt][Aa][Ll][Ll]|-[Ii]|--[Ii])
